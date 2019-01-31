@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  root 'static_pages#home'
-  get  'static_pages/home'
-  get  'static_pages/help'
-  get  'static_pages/about'
-  get  'static_pages/contact'
+
+  root to: 'static_pages#home' 
+  get 'users/new' #Railsのコントローラ記述規則に従っているため省略して記述可能
+  get  '/help',    to: 'static_pages#help' # コントローラ#メソッド で記述されている
+  get  '/about',   to: 'static_pages#about' 
+  get  '/contact', to: 'static_pages#contact' 
+  get  '/signup',  to: 'users#new'
 end
