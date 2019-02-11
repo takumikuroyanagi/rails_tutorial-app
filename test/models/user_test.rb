@@ -28,7 +28,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "email should not be too long" do
     @user.email = "a"*244 + "@example.com"
-    assert @user.valid? # 元は assert_not @user.valid?
+    assert_not @user.valid? # 元は assert_not @user.valid?→ 2019/2/11もとに戻す
   end
 
   test "email validation should accept valid addresses" do
@@ -65,7 +65,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "password should be present (nonblank)" do
     @user.password = @user.password_confirmation = " " * 6
-    assert @user.valid? # 元は assert_not @user.valid?
+    assert_not @user.valid? # 元は assert_not @user.valid? → 2019/2/11もとに戻す
   end
 
   test "password should have a minimum length" do
