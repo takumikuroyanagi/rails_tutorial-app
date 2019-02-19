@@ -104,6 +104,21 @@ class User < ApplicationRecord
     #Micropost.where("user_id = ?", id)
   end
 
+  # ユーザーをフォローする
+  def follow(other_user)
+    following << other_user
+  end
+
+  # ユーザーをフォロー解除する
+  def unfollow(other_user)
+    active_relationships.find_by(followed_id: other_user.id).destroy
+  end
+
+  # 現在のユーザーがフォローしてたらtrueを返す
+  def following?(other_user)
+    following.include?(other_user)
+  end
+
   private
 
     # メールアドレスをすべて小文字にする
@@ -116,4 +131,6 @@ class User < ApplicationRecord
       self.activation_token  = User.new_token
       self.activation_digest = User.digest(self.activation_token) #self.を追加
     end
+
+
 end
