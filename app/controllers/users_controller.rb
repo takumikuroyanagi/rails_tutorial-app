@@ -16,18 +16,25 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+    # POST /users
   def create
     @user = User.new(user_params)
-    if @user.save
-      log_in @user
-      flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
+    if @user.save # => Validation
+      # Sucess
+      @user.send_activation_email
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
     else
-      render 'new'
+      # Failure
+      render 'new'      
     end
   end
 
+  # GET /users/:id/edit
+  # params[:id] => :id
   def edit
+    @user = User.find(params[:id])
+    # => app/views/users/edit.html.erb
   end
 
   def destroy
@@ -37,6 +44,7 @@ class UsersController < ApplicationController
   end
 
   def update
+    @user = User.find(params[:id]) #追加
     if @user.update_attributes(user_params)
       flash[:success] = "Profile updated"
       redirect_to @user

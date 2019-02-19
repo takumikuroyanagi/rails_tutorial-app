@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MicropostInterfaceTest < ActionDispatch::IntegrationTest
+class MicropostsInterfaceTest < ActionDispatch::IntegrationTest
 
   def setup
     @user = users(:michael)
@@ -12,7 +12,9 @@ class MicropostInterfaceTest < ActionDispatch::IntegrationTest
     assert_select 'div.pagination'
     assert_select 'input[type="file"]'
     # 無効な送信
-    post microposts_path, params: { micropost: { content: "" } }
+    assert_no_difference 'Micropost.count' do
+      post microposts_path, params: { micropost: { content: "" } }
+    end
     assert_select 'div#error_explanation'
     # 有効な送信
     content = "This micropost really ties the room together"
@@ -22,11 +24,11 @@ class MicropostInterfaceTest < ActionDispatch::IntegrationTest
                                       { content: content,
                                         picture: picture } }
     end
-    assert micropost.picture?
+    assert_redirected_to root_url
     follow_redirect!
     assert_match content, response.body
     # 投稿を削除する
-    assert_select 'a', 'delete'
+    assert_select 'a', text: 'delete'
     first_micropost = @user.microposts.paginate(page: 1).first
     assert_difference 'Micropost.count', -1 do
       delete micropost_path(first_micropost)
