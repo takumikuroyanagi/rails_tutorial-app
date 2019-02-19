@@ -56,13 +56,6 @@ class User < ApplicationRecord
     BCrypt::Password.new(digest).is_password?(token)
   end
 
-=begin
-  def authenticated?(remember_token)
-    return false if remember_digest.nil?
-    BCrypt::Password.new(remember_digest).is_password?(remember_token)
-  end
-=end
-
   # ユーザーのログイン情報を破棄する
   def forget
     update_attribute(:remember_digest, nil)
@@ -118,6 +111,8 @@ class User < ApplicationRecord
   def following?(other_user)
     following.include?(other_user)
   end
+
+  #followed_by?メソッドを定義してもよかったのですが、サンプルアプリケーションで実際に使う場面がなかったのでこのメソッドは省略しました。
 
   private
 
